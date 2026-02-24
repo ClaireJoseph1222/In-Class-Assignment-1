@@ -40,7 +40,25 @@ export const History: React.FC = () => {
     void fetchHistory();
   }, []);
 
-  return (
+  const clearHistory = async(): Promise<void> => {
+     try {
+      const response = await fetch("http://localhost:3000/calc/clear", {
+        method: "DELETE",
+      });
+      const json = await response.json();
+      if (json.success) {
+        setRecords([]); // clear state locally too
+      } else {
+        setError("Failed to clear history");
+      }
+    } catch {
+      setError("Network error while clearing history");
+    }
+  };
+  
+
+return (
+  
     <div>
       <h2>Calculation History</h2>
       <button
@@ -48,11 +66,19 @@ export const History: React.FC = () => {
         onClick={() => {
           void fetchHistory();
         }}
-        style={{ marginBottom: "1rem" }}
+        style={{ marginBottom: "1rem", marginRight: "0.5rem" }}
       >
         Refresh
       </button>
-
+      <button
+        type="button"
+        onClick={() => {
+          void clearHistory();
+        }}
+        style={{ marginBottom: "1rem" }}
+      >
+        Clear
+      </button>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
