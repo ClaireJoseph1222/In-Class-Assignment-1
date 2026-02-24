@@ -5,6 +5,7 @@ export interface CalculationRecord {
   val1: number;
   val2: number;
   operator: Operator | string;
+  answer: number;
   // Server currently does not store answer, but client can compute it
 }
 

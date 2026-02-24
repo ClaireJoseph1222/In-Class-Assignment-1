@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { CalculationRecord, GetDataResponse } from "../types";
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:3000/calc";
 
 export const History: React.FC = () => {
   const [records, setRecords] = useState<CalculationRecord[]>([]);
@@ -83,13 +83,13 @@ export const History: React.FC = () => {
                 Value 2
               </th>
               <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
-                Expression
+                Answer
               </th>
             </tr>
           </thead>
           <tbody>
             {records.map((rec) => {
-              const expression = `${rec.val1} ${rec.operator} ${rec.val2}`;
+              //const expression = `${rec.val1} ${rec.operator} ${rec.val2}`;
               return (
                 <tr key={rec.id}>
                   <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
@@ -105,7 +105,7 @@ export const History: React.FC = () => {
                     {rec.val2}
                   </td>
                   <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
-                    {expression}
+                    {rec.answer}
                   </td>
                 </tr>
               );

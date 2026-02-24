@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Calculator } from "./components/Calculator";
-import { History } from "./components/History";
+import { Calculator } from "./components/Calculator.tsx";
+import { History } from "./components/History.tsx";
 
 type View = "calculator" | "history";
 
