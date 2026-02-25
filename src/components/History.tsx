@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { CalculationRecord, GetDataResponse } from "../types";
 
-const API_BASE_URL = "http://localhost:3000";
+const API_BASE_URL = "http://localhost:3000/calc";
 
 export const History: React.FC = () => {
   const [records, setRecords] = useState<CalculationRecord[]>([]);
@@ -40,7 +40,25 @@ export const History: React.FC = () => {
     void fetchHistory();
   }, []);
 
-  return (
+  const clearHistory = async(): Promise<void> => {
+     try {
+      const response = await fetch("http://localhost:3000/calc/clear", {
+        method: "DELETE",
+      });
+      const json = await response.json();
+      if (json.success) {
+        setRecords([]); // clear state locally too
+      } else {
+        setError("Failed to clear history");
+      }
+    } catch {
+      setError("Network error while clearing history");
+    }
+  };
+  
+
+return (
+  
     <div>
       <h2>Calculation History</h2>
       <button
@@ -48,11 +66,19 @@ export const History: React.FC = () => {
         onClick={() => {
           void fetchHistory();
         }}
-        style={{ marginBottom: "1rem" }}
+        style={{ marginBottom: "1rem", marginRight: "0.5rem" }}
       >
         Refresh
       </button>
-
+      <button
+        type="button"
+        onClick={() => {
+          void clearHistory();
+        }}
+        style={{ marginBottom: "1rem" }}
+      >
+        Clear
+      </button>
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -83,13 +109,13 @@ export const History: React.FC = () => {
                 Value 2
               </th>
               <th style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
-                Expression
+                Answer
               </th>
             </tr>
           </thead>
           <tbody>
             {records.map((rec) => {
-              const expression = `${rec.val1} ${rec.operator} ${rec.val2}`;
+              //const expression = `${rec.val1} ${rec.operator} ${rec.val2}`;
               return (
                 <tr key={rec.id}>
                   <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
@@ -105,7 +131,7 @@ export const History: React.FC = () => {
                     {rec.val2}
                   </td>
                   <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
-                    {expression}
+                    {rec.answer}
                   </td>
                 </tr>
               );
